@@ -1,0 +1,54 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Rounded Box with Background</title>
+  <style>
+    body {
+      margin: 0;
+      padding: 0;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      height: 100vh;
+      background: url('Images/sea_img.jpg') no-repeat center center/cover;
+    }
+
+    .rounded-box {
+      width: 300px;
+      height: 200px;
+      border: 2px solid rgba(255, 255, 255, 0.5);
+      border-radius: 15px;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      text-align: center;
+      color: white;
+      font-size: 18px;
+      font-family: Arial, sans-serif;
+      backdrop-filter: blur(5px);
+      background-color: rgba(0, 0, 0, 0.2);
+    }
+  </style>
+</head>
+<body>
+  <div class="rounded-box">
+    <div><h4>Input</h4>
+    <br>
+    <p>It is a process where user or sensor gives infomation to the processer </p></div>
+  </div>
+  <div class="rounded-box">
+    <div><h4>Process</h4>
+    <br>
+    <p>It is a process where processor processes the information given by user or sensor</p></div>
+  </div>
+  <div class="rounded-box">
+    
+    <div><h4>Output</h4>
+    <br>
+    <p>It is a process where processor gives information to the user or sensor</p></div>
+  </div>
+  
+</body>
+</html>
