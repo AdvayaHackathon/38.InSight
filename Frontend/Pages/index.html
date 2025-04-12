@@ -133,15 +133,25 @@
           <div class="arrow"></div>
         `;
 
-        // Append the new block to the container
-        container.appendChild(newBlock);
+        // Find the "Output" block and insert the new block before it
+        const outputBlock = Array.from(blocks).find((block) =>
+          block.querySelector('h4')?.textContent === 'Output'
+        );
+        if (outputBlock) {
+          container.insertBefore(newBlock, outputBlock);
+        } else {
+          // If "Output" block is not found, append the new block at the end
+          container.appendChild(newBlock);
+        }
 
         // Connect the blocks with arrows
         connectBlocks();
       } else if (event.deltaY > 0 && blocks.length > 3) {
         // Scrolling down: Remove the last block if there are more than 3 blocks
-        const lastBlock = blocks[blocks.length - 1];
-        container.removeChild(lastBlock);
+        const lastBlock = blocks[blocks.length - 2]; // Ensure "Output" block is not removed
+        if (lastBlock && lastBlock.querySelector('h4')?.textContent !== 'Output') {
+          container.removeChild(lastBlock);
+        }
 
         // Connect the remaining blocks with arrows
         connectBlocks();
@@ -185,6 +195,6 @@
 
     // Initial connection of blocks
     connectBlocks();
-  </script>
+  </script> 
 </body>
 </html>
