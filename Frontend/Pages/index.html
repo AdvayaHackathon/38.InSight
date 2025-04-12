@@ -118,61 +118,33 @@
   </div>
 
   <script>
-    let isRightMouseButtonPressed = false;
-    let scrollTimeout = null;
-
-    // Detect when the right mouse button is pressed
-    document.addEventListener('mousedown', (event) => {
-      if (event.button === 2) { // Right mouse button
-        isRightMouseButtonPressed = true;
-      }
-    });
-
-    // Detect when the right mouse button is released
-    document.addEventListener('mouseup', (event) => {
-      if (event.button === 2) { // Right mouse button
-        isRightMouseButtonPressed = false;
-      }
-    });
-
-    // Add a new block between two existing blocks
+    // Function to dynamically add or remove blocks based on scroll direction
     document.addEventListener('wheel', (event) => {
-      if (isRightMouseButtonPressed) {
-        // Prevent the default scroll behavior
-        event.preventDefault();
+      const container = document.getElementById('block-container');
+      const blocks = container.querySelectorAll('.rounded-box');
 
-        // Clear the timeout if the user scrolls quickly
-        if (scrollTimeout) {
-          clearTimeout(scrollTimeout);
-        }
+      if (event.deltaY < 0) {
+        // Scrolling up: Add a new block
+        const newBlock = document.createElement('div');
+        newBlock.className = 'rounded-box';
+        newBlock.innerHTML = `
+          <h4>Dynamic Block</h4>
+          <p>This block was added dynamically when scrolling up.</p>
+          <div class="arrow"></div>
+        `;
 
-        // Set a timeout to detect slow scrolling
-        scrollTimeout = setTimeout(() => {
-          // Get the container and all existing blocks
-          const container = document.getElementById('block-container');
-          const blocks = container.querySelectorAll('.rounded-box');
+        // Append the new block to the container
+        container.appendChild(newBlock);
 
-          // Determine the position to insert the new block (e.g., between the first and second blocks)
-          const insertIndex = Math.floor(blocks.length / 2); // Insert in the middle
+        // Connect the blocks with arrows
+        connectBlocks();
+      } else if (event.deltaY > 0 && blocks.length > 3) {
+        // Scrolling down: Remove the last block if there are more than 3 blocks
+        const lastBlock = blocks[blocks.length - 1];
+        container.removeChild(lastBlock);
 
-          // Create a new block
-          const newBlock = document.createElement('div');
-          newBlock.className = 'rounded-box';
-          newBlock.innerHTML = `
-            <h4>Dynamic Block</h4>
-            <p>This block was added dynamically between two existing blocks.</p>
-          `;
-
-          // Insert the new block at the calculated position
-          if (blocks[insertIndex]) {
-            container.insertBefore(newBlock, blocks[insertIndex].nextSibling);
-          } else {
-            container.appendChild(newBlock); // Fallback if no blocks exist
-          }
-
-          // Connect the blocks with arrows
-          connectBlocks();
-        }, 200); // Adjust the timeout duration for sensitivity (200ms is a good starting point)
+        // Connect the remaining blocks with arrows
+        connectBlocks();
       }
     });
 
@@ -210,11 +182,6 @@
         container.appendChild(arrow);
       }
     }
-
-    // Prevent the context menu from appearing when right-clicking
-    document.addEventListener('contextmenu', (event) => {
-      event.preventDefault();
-    });
 
     // Initial connection of blocks
     connectBlocks();
