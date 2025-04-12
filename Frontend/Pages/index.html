@@ -3,99 +3,213 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Rounded Box with Background</title>
+  <title>inSight - Dynamic Blocks</title>
   <style>
     body {
       margin: 0;
       padding: 0;
       display: flex;
-      justify-content:center  ;
+      justify-content: center;
       align-items: center;
       height: 100vh;
       background: url('Images/sea_img.jpg') no-repeat center center/cover;
+      background-size: 120%; /* Initially zoomed */
+      transition: background-size 0.5s ease; /* Smooth zoom effect */
     }
 
     .rounded-box {
       width: 300px;
       height: 200px;
       margin: auto;
-      border: 2px solid rgba(0, 0, 0, 0.5);
+      border: 2px solid rgba(255, 255, 255, 0.5);
       border-radius: 15px;
       display: flex;
+      flex-direction: column;
       justify-content: center;
-      align-items: center;
-      text-align: center;
+      align-items: flex-start;
+      padding: 15px;
+      text-align: left;
       color: white;
-      font-size: 18px;
+      font-size: 16px;
       font-family: Arial, sans-serif;
       backdrop-filter: blur(5px);
-      background-color: rgba(0, 0, 0, 0.2);
+      background-color: rgba(0, 0, 0, 0.4);
+      position: relative;
+      overflow: hidden; /* Prevent text from overflowing */
+      word-wrap: break-word; /* Ensure long words break properly */
+      word-break: break-word; /* Break long words if necessary */
+      white-space: normal; /* Allow text to wrap to the next line */
+    }
+
+    #block-container {
+      margin-top: 80px;
+      display: flex;
+      flex-direction: row;
+      align-items: center;
+      gap: 40px;
+      position: relative;
+      overflow-x: auto; /* Allow horizontal scrolling if needed */
+      white-space: nowrap;
+      padding: 10px; /* Add padding to prevent content from touching edges */
+    }
+
+    .arrow {
+      position: absolute;
+      top: 50%;
+      right: -20px;
+      transform: translateY(-50%);
+      width: 40px;
+      height: 2px;
+      background-color: white;
+    }
+
+    .arrow::after {
+      content: '';
+      position: absolute;
+      top: -4px;
+      right: -10px;
+      border: 5px solid transparent;
+      border-left-color: white;
+    }
+
+    .rounded-box:last-child .arrow {
+      display: none; /* Hide the arrow for the last box */
+    }
+
+    header {
+      position: fixed;
+      top: 0;
+      width: 100%;
+      background-color: rgba(0, 0, 0, 0.5);
+      color: white;
+      text-align: left;
+      padding: 10px;
+      font-size: 24px;
+      font-family: Arial, sans-serif;
+      z-index: 1000;
+    }
+
+    header h1 {
+      margin: 0;
+      padding-left: 20px;
     }
   </style>
 </head>
 <body>
-  <header style="position: fixed; top: 0; width: 100%; background-color: rgba(0, 0, 0, 0.5); color: white; text-align: left; padding: 10px; font-size: 24px; font-family: Arial, sans-serif; z-index: 1000;">
-    <h1 style="margin: 0; padding-left: 20px;">inSight</h1>
+  <header>
+    <h1>inSight</h1>
   </header>
-  
-  <div id="block-container" style="margin-top: 80px; display: flex; flex-direction: row; align-items: center; gap: 20px; position: relative;">
-    <div class="rounded-box" style="width: 200px; height: 150px;">
-      <div>
-        <h4 style="text-align: left; margin-left: 10px;">Input</h4>
-        <p style="font-size: 14px;">It is a process where user or sensor gives information to the processor</p>
-      </div>
+
+  <div id="block-container">
+    <div class="rounded-box">
+      <h4>Input</h4>
+      <p>Users or sensors provide information to the processor for further action.</p>
+      <div class="arrow"></div>
     </div>
-    <div class="rounded-box" style="width: 200px; height: 150px;">
-      <div>
-        <h4 style="text-align: left; margin-left: 10px;">Process</h4>
-        <p style="font-size: 14px;">It is a process where processor processes the information given by user or sensor</p>
-      </div>
+    <div class="rounded-box">
+      <h4>Process</h4>
+      <p>The processor analyzes and processes the information provided by the user or sensor.</p>
+      <div class="arrow"></div>
     </div>
-    <div class="rounded-box" style="width: 200px; height: 150px;">
-      <div>
-        <h4 style="text-align: left; margin-left: 10px;">Output</h4>
-        <p style="font-size: 14px;">It is a process where processor gives information to the user or sensor</p>
-      </div>
+    <div class="rounded-box">
+      <h4>Output</h4>
+      <p>The processor delivers the processed information back to the user or sensor.</p>
     </div>
   </div>
 
   <script>
     let isRightMouseButtonPressed = false;
+    let scrollTimeout = null;
 
+    // Detect when the right mouse button is pressed
     document.addEventListener('mousedown', (event) => {
-      if (event.button === 2) {
+      if (event.button === 2) { // Right mouse button
         isRightMouseButtonPressed = true;
       }
     });
 
+    // Detect when the right mouse button is released
     document.addEventListener('mouseup', (event) => {
-      if (event.button === 2) {
+      if (event.button === 2) { // Right mouse button
         isRightMouseButtonPressed = false;
       }
     });
 
+    // Add a new block and connect it with an arrow
     document.addEventListener('wheel', (event) => {
       if (isRightMouseButtonPressed) {
+        // Prevent the default scroll behavior
         event.preventDefault();
 
-        const container = document.getElementById('block-container');
-        const newBlock = document.createElement('div');
-        newBlock.className = 'rounded-box';
-        newBlock.style.width = '200px';
-        newBlock.style.height = '150px';
-        newBlock.innerHTML = `
-          <div>
-            <h4 style="text-align: left; margin-left: 10px;">Dynamic Block</h4>
-            <p style="font-size: 14px;">This block was added dynamically while holding the right mouse button and scrolling.</p>
-          </div>
-        `;
-        container.appendChild(newBlock);
+        // Clear the timeout if the user scrolls quickly
+        if (scrollTimeout) {
+          clearTimeout(scrollTimeout);
+        }
+
+        // Set a timeout to detect slow scrolling
+        scrollTimeout = setTimeout(() => {
+          // Get the container and all existing blocks
+          const container = document.getElementById('block-container');
+
+          // Create a new block
+          const newBlock = document.createElement('div');
+          newBlock.className = 'rounded-box';
+          newBlock.innerHTML = `
+            <h4>Dynamic Block</h4>
+            <p>This block was added dynamically while holding the right mouse button and scrolling slowly.</p>
+          `;
+
+          // Append the new block to the container
+          container.appendChild(newBlock);
+
+          // Connect the blocks with arrows
+          connectBlocks();
+        }, 200); // Adjust the timeout duration for sensitivity (200ms is a good starting point)
       }
     });
 
+    // Function to connect blocks with arrows
+    function connectBlocks() {
+      const container = document.getElementById('block-container');
+      const blocks = container.querySelectorAll('.rounded-box');
+
+      // Remove existing arrows
+      const existingArrows = container.querySelectorAll('.arrow');
+      existingArrows.forEach((arrow) => arrow.remove());
+
+      // Loop through blocks and connect them
+      for (let i = 0; i < blocks.length - 1; i++) {
+        const currentBlock = blocks[i];
+        const nextBlock = blocks[i + 1];
+
+        // Calculate positions
+        const currentRect = currentBlock.getBoundingClientRect();
+        const nextRect = nextBlock.getBoundingClientRect();
+
+        // Create an arrow
+        const arrow = document.createElement('div');
+        arrow.className = 'arrow';
+
+        // Position the arrow between the blocks
+        arrow.style.position = 'absolute';
+        arrow.style.top = `${currentRect.top + currentRect.height / 2 - container.getBoundingClientRect().top}px`;
+        arrow.style.left = `${currentRect.right - container.getBoundingClientRect().left}px`;
+        arrow.style.width = `${nextRect.left - currentRect.right}px`;
+        arrow.style.height = '2px';
+        arrow.style.backgroundColor = 'white';
+
+        // Append the arrow to the container
+        container.appendChild(arrow);
+      }
+    }
+
+    // Prevent the context menu from appearing when right-clicking
     document.addEventListener('contextmenu', (event) => {
       event.preventDefault();
     });
+
+    // Initial connection of blocks
+    connectBlocks();
   </script>
 </body>
 </html>
