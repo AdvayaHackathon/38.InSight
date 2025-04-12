@@ -135,7 +135,7 @@
       }
     });
 
-    // Add a new block and connect it with an arrow
+    // Add a new block between two existing blocks
     document.addEventListener('wheel', (event) => {
       if (isRightMouseButtonPressed) {
         // Prevent the default scroll behavior
@@ -150,17 +150,25 @@
         scrollTimeout = setTimeout(() => {
           // Get the container and all existing blocks
           const container = document.getElementById('block-container');
+          const blocks = container.querySelectorAll('.rounded-box');
+
+          // Determine the position to insert the new block (e.g., between the first and second blocks)
+          const insertIndex = Math.floor(blocks.length / 2); // Insert in the middle
 
           // Create a new block
           const newBlock = document.createElement('div');
           newBlock.className = 'rounded-box';
           newBlock.innerHTML = `
             <h4>Dynamic Block</h4>
-            <p>This block was added dynamically while holding the right mouse button and scrolling slowly.</p>
+            <p>This block was added dynamically between two existing blocks.</p>
           `;
 
-          // Append the new block to the container
-          container.appendChild(newBlock);
+          // Insert the new block at the calculated position
+          if (blocks[insertIndex]) {
+            container.insertBefore(newBlock, blocks[insertIndex].nextSibling);
+          } else {
+            container.appendChild(newBlock); // Fallback if no blocks exist
+          }
 
           // Connect the blocks with arrows
           connectBlocks();
