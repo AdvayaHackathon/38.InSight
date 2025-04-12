@@ -9,7 +9,7 @@
       margin: 0;
       padding: 0;
       display: flex;
-      justify-content: center;
+      justify-content:center  ;
       align-items: center;
       height: 100vh;
       background: url('Images/sea_img.jpg') no-repeat center center/cover;
@@ -18,7 +18,8 @@
     .rounded-box {
       width: 300px;
       height: 200px;
-      border: 2px solid rgba(255, 255, 255, 0.5);
+      margin: auto;
+      border: 2px solid rgba(0, 0, 0, 0.5);
       border-radius: 15px;
       display: flex;
       justify-content: center;
@@ -33,22 +34,68 @@
   </style>
 </head>
 <body>
-  <div class="rounded-box">
-    <div><h4>Input</h4>
-    <br>
-    <p>It is a process where user or sensor gives infomation to the processer </p></div>
-  </div>
-  <div class="rounded-box">
-    <div><h4>Process</h4>
-    <br>
-    <p>It is a process where processor processes the information given by user or sensor</p></div>
-  </div>
-  <div class="rounded-box">
-    
-    <div><h4>Output</h4>
-    <br>
-    <p>It is a process where processor gives information to the user or sensor</p></div>
-  </div>
+  <header style="position: fixed; top: 0; width: 100%; background-color: rgba(0, 0, 0, 0.5); color: white; text-align: left; padding: 10px; font-size: 24px; font-family: Arial, sans-serif; z-index: 1000;">
+    <h1 style="margin: 0; padding-left: 20px;">inSight</h1>
+  </header>
   
+  <div id="block-container" style="margin-top: 80px; display: flex; flex-direction: row; align-items: center; gap: 20px; position: relative;">
+    <div class="rounded-box" style="width: 200px; height: 150px;">
+      <div>
+        <h4 style="text-align: left; margin-left: 10px;">Input</h4>
+        <p style="font-size: 14px;">It is a process where user or sensor gives information to the processor</p>
+      </div>
+    </div>
+    <div class="rounded-box" style="width: 200px; height: 150px;">
+      <div>
+        <h4 style="text-align: left; margin-left: 10px;">Process</h4>
+        <p style="font-size: 14px;">It is a process where processor processes the information given by user or sensor</p>
+      </div>
+    </div>
+    <div class="rounded-box" style="width: 200px; height: 150px;">
+      <div>
+        <h4 style="text-align: left; margin-left: 10px;">Output</h4>
+        <p style="font-size: 14px;">It is a process where processor gives information to the user or sensor</p>
+      </div>
+    </div>
+  </div>
+
+  <script>
+    let isRightMouseButtonPressed = false;
+
+    document.addEventListener('mousedown', (event) => {
+      if (event.button === 2) {
+        isRightMouseButtonPressed = true;
+      }
+    });
+
+    document.addEventListener('mouseup', (event) => {
+      if (event.button === 2) {
+        isRightMouseButtonPressed = false;
+      }
+    });
+
+    document.addEventListener('wheel', (event) => {
+      if (isRightMouseButtonPressed) {
+        event.preventDefault();
+
+        const container = document.getElementById('block-container');
+        const newBlock = document.createElement('div');
+        newBlock.className = 'rounded-box';
+        newBlock.style.width = '200px';
+        newBlock.style.height = '150px';
+        newBlock.innerHTML = `
+          <div>
+            <h4 style="text-align: left; margin-left: 10px;">Dynamic Block</h4>
+            <p style="font-size: 14px;">This block was added dynamically while holding the right mouse button and scrolling.</p>
+          </div>
+        `;
+        container.appendChild(newBlock);
+      }
+    });
+
+    document.addEventListener('contextmenu', (event) => {
+      event.preventDefault();
+    });
+  </script>
 </body>
 </html>
